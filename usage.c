@@ -19,14 +19,17 @@ void
 print_help(char *prog)
 {
 	fprintf(stderr,
-	"usage: %s [options] <target>\n"
+	"usage: %s [options] \"<target>\"\n"
 	"\n"
 	"\t-?, --help		print this help message\n"
 	"\t-h, --fuzzer-host	hostname or ip address of the fuzzer\n"	
 	"\t-p, --fuzzer-port	port the fuzzer is listening on\n"
 	"\t-l, --crashlog	name of the file to log crash reports to\n"
-	"\t-c, --continuos	run in continuous mode, resurrecting the\n"
-	"\t			target if a fatal signal is sent\n",
+	"\t-c, --continuous	run in continuous mode, resurrecting the\n"
+	"\t			target if a fatal signal is sent\n"
+	"\n"
+	"<target> argument must be encapsultaed it in double qoutes and\n"
+	"a full path to the target executable is required\n",
 	prog);
 }
 
@@ -35,7 +38,9 @@ parse_opts(int argc, char **argv)
 {
 	opts_t *opts;
 	char *tmp;
+	char **newargv;
 	int result;
+	int i;
 	int c;
 
 	opts = (opts_t *) malloc(sizeof(opts_t));	
@@ -45,6 +50,7 @@ parse_opts(int argc, char **argv)
 		return NULL;		
 	}
 
+	i = 0;
 	memset(opts, 0, sizeof(opts_t));
 	while ((c = getopt_long(argc, argv, "?h:p:l:c", long_options,
 	      		       &option_index)) != -1)
@@ -79,9 +85,23 @@ parse_opts(int argc, char **argv)
 			default:
 				return NULL;
 		}
+		i++;
 	}
 	
 	/* our target should now be in the argument vector at 
-         * index option_index + 1 */
-	opts->argv = &argv[option_index+1];
+         * index i + 1 */
+	if ((i+1) <= (argc-1))
+	{
+		result = makeargv(argv[i+1], " ", &newargv);
+		if (result<0)
+			return NULL;
+		opts->argv = newargv;
+		fprintf(stderr, "opts->argv: %08x\n", opts->argv);
+	} 
+	else 
+	{
+		return NULL;	
+	}
+
+	return opts;
 }
