@@ -46,11 +46,13 @@ parse_opts(int argc, char **argv)
 	}
 
 	memset(opts, 0, sizeof(opts_t));
-	while ((c = getopt_long(argc, argv, "h:p:l:c", long_options,
-	      		       &option_index)) != 1)
+	while ((c = getopt_long(argc, argv, "?h:p:l:c", long_options,
+	      		       &option_index)) != -1)
 	{
 		switch(c)
 		{
+			case '?':
+				return NULL;
 			case 'h':
 				tmp = (char *) malloc(strlen(optarg));
 				if (tmp==NULL)
@@ -74,8 +76,12 @@ parse_opts(int argc, char **argv)
 			case 'c':
 				opts->continuous++;	
 				break;
+			default:
+				return NULL;
 		}
 	}
 	
-	fprintf(stderr, "opton_index: %d\n", option_index);
+	/* our target should now be in the argument vector at 
+         * index option_index + 1 */
+	opts->argv = &argv[option_index+1];
 }
