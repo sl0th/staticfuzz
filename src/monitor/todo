@@ -1,0 +1,9 @@
+# Nick Stephens
+# monitor TODO
+
++ fuzzer alert code
+	this function will send a crash alert message to the partner fuzz 
+	application
+
++ integrate libunwind
+	add the abiltiy to unwind the stack frame

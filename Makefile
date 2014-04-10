@@ -1,2 +1,5 @@
-all: monitor.o usage.o makeargv.o
-	$(CC) -o monitor monitor.o usage.o makeargv.o
+all:
+	cd src && $(MAKE) all
+
+clean:
+	cd src && $(MAKE) clean
