@@ -2,6 +2,9 @@ staticfuzz
 ----------
 MPD Protocol Fuzzer
 
+Components:
+===========
+
 1. Monitor
 	The monitor's purpose is to watch over the target MPD server 
 	and report any interesting signals sent to the target. These 
