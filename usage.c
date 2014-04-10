@@ -8,6 +8,7 @@ int option_index = 0;
 
 static struct option long_options[] = {
 	{ "help", no_argument, NULL, '?'},
+	{ "target-output", required_argument, NULL, 'o'}, 
 	{ "fuzzer-host", required_argument, NULL, 'h'},
 	{ "fuzzer-port", required_argument, NULL, 'p'},
 	{ "crashlog", required_argument, NULL, 'l'},
@@ -22,6 +23,7 @@ print_help(char *prog)
 	"usage: %s [options] \"<target>\"\n"
 	"\n"
 	"\t-?, --help		print this help message\n"
+	"\t-o, --target-output  specify a file to redirect target output\n"
 	"\t-h, --fuzzer-host	hostname or ip address of the fuzzer\n"	
 	"\t-p, --fuzzer-port	port the fuzzer is listening on\n"
 	"\t-l, --crashlog	name of the file to log crash reports to\n"
@@ -52,13 +54,21 @@ parse_opts(int argc, char **argv)
 
 	i = 0;
 	memset(opts, 0, sizeof(opts_t));
-	while ((c = getopt_long(argc, argv, "?h:p:l:c", long_options,
+	while ((c = getopt_long(argc, argv, "?h:o:p:l:c", long_options,
 	      		       &option_index)) != -1)
 	{
 		switch(c)
 		{
 			case '?':
 				return NULL;
+			case 'o':
+				tmp = (char *) malloc(strlen(optarg));
+				if (tmp==NULL)
+					return NULL;
+				strcpy(tmp, optarg);
+				opts->target_output = tmp;
+				i++;
+				break;
 			case 'h':
 				tmp = (char *) malloc(strlen(optarg));
 				if (tmp==NULL)

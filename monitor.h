@@ -8,6 +8,7 @@
 #define ALERT   "[\x1b[33m!\x1b[37m] "
 
 typedef struct {
+	char 		*target_output;
 	char 		*fuzzer_host;
 	uint32_t	fuzzer_port;
 	char 		*crashlog;
