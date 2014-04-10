@@ -65,12 +65,14 @@ parse_opts(int argc, char **argv)
 					return NULL;
 				strcpy(tmp, optarg);
 				opts->fuzzer_host = tmp;
+				i++;
 				break;
 			case 'p':
 				result = atoi(optarg);
 				if (result==0)
 					return NULL;
 				opts->fuzzer_port = result;
+				i++;
 				break;
 			case 'l':
 				tmp = (char *) malloc(strlen(optarg));	
@@ -78,6 +80,7 @@ parse_opts(int argc, char **argv)
 					return NULL;
 				strcpy(tmp, optarg);
 				opts->crashlog = tmp;
+				i++;
 				break;
 			case 'c':
 				opts->continuous++;	
@@ -96,7 +99,6 @@ parse_opts(int argc, char **argv)
 		if (result<0)
 			return NULL;
 		opts->argv = newargv;
-		fprintf(stderr, "opts->argv: %08x\n", opts->argv);
 	} 
 	else 
 	{
