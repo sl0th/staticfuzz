@@ -1,0 +1,13 @@
+staticfuzz
+----------
+MPD Protocol Fuzzer
+
+1. Monitor
+	The monitor's purpose is to watch over the target MPD server 
+	and report any interesting signals sent to the target. These 
+	signals may suggest a vulnerability in the server discovered 
+	during the fuzzig process. 
+
+	The monitor has the ability to communicate with a fuzzer. This
+	is done over TCP and alerts the fuzzer that a vulnerability 
+	may have been found.
