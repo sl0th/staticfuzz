@@ -4,7 +4,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
+#include <fcntl.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/user.h>
 #include <sys/wait.h>
 #include <sys/ptrace.h>
@@ -59,13 +61,28 @@ printstats(pid_t target, char *crashreport)
 }
 
 pid_t
-spinup(char **argv)
+spinup(char **argv, char *redirect)
 {
 	pid_t child;	
+	int fd;
 
 	child = fork();
 	if (child==0)
 	{
+		if (redirect!=NULL)
+		{
+			if ((fd = open(redirect, O_CREAT | O_TRUNC | 
+				O_WRONLY, 0644)) < 0)
+			{
+				perror(FAILURE "(child) open");
+			}
+			else	
+			{
+				dup2(fd, 1); /* stdout */
+				dup2(fd, 2); /* stderr */
+			}
+		}
+
 		ptrace(PTRACE_TRACEME, (pid_t) 0, (void *) NULL, 
 			(void *) NULL);
 
@@ -165,7 +182,7 @@ main(int argc, char **argv)
 
 	do
 	{
-		childpid = spinup(opts->argv);
+		childpid = spinup(opts->argv, opts->target_output);
 		if (childpid < 0)
 		{
 			printf(FAILURE "failed to spin up target process\n");
