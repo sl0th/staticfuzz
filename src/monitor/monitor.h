@@ -13,6 +13,7 @@ typedef struct {
 	uint32_t	fuzzer_port;
 	char 		*crashlog;
 	uint8_t 	continuous;
+	uint8_t		verbose;
 	char 		**argv;
 } opts_t;
 

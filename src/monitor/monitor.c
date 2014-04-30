@@ -17,6 +17,16 @@
  * host and port this fuzzer is listening on can be configured through the
  * command line arguments */
 
+void cprintf(pid_t original, pid_t signaled, char *format)
+{
+	if (original != signaled)
+		printf("[Child Thread %d] ", signaled);
+	else
+		printf("[Parent Thread %d] ", signaled);
+	
+	printf(format);
+}
+
 void 
 printstats(pid_t target, char *crashreport)
 {
@@ -45,6 +55,7 @@ printstats(pid_t target, char *crashreport)
 			perror("fopen");
 		}
 	}
+	fprintf(stderr, ALERT "attempting to print crash stats\n");
 	fprintf(fp, "--[ BEGIN REGISTER DUMP\n");
 	fprintf(fp, "--[ %s", ctime(&crashtime));
 	fprintf(fp, "EBX: %08x | ECX: %08x | EDX: %08x |\n"
@@ -58,6 +69,17 @@ printstats(pid_t target, char *crashreport)
 
 	if (fp != stdout)
 		fclose(fp);
+}
+
+void
+setptraceopt(pid_t target)
+{
+	long ret;	
+
+	ret = ptrace(PTRACE_SETOPTIONS, target, NULL, PTRACE_O_TRACECLONE);
+
+	fprintf(stderr, "returned: %ld\n", ret);
+
 }
 
 pid_t
@@ -99,22 +121,31 @@ spinup(char **argv, char *redirect)
 }
 
 void
-monitor(pid_t target, char *crashreport)
+monitor(pid_t target, char *crashreport, int verbose)
 {
 	struct user_regs_struct regs;
-	pid_t error;	
 	int status;
+	pid_t signaled;
+	int setopt;
+	int error;
+	int ret;
+	pid_t original;
+	pid_t newpid;
 	memset(&regs, 0, sizeof(struct user_regs_struct));
 
+	original = target;
+	setopt = 0;
 	while(1)
 	{
-		error = waitpid(target, &status, 0);
-		if (error != target)
+		signaled = waitpid(-1, &status, __WALL);
+		if (signaled == -1)
 		{
 			printf(FAILURE "wait returned with " 
-				"error %d\n", error);
+				"error %d\n", signaled);
 			return; 
 		}
+		if (verbose)
+			fprintf(stderr, ALERT "process %d recieved signal!\n", signaled);
 		if (WIFEXITED(status))
 		{
 			printf(ALERT "(status: %d, signal: %s) "
@@ -131,14 +162,32 @@ monitor(pid_t target, char *crashreport)
 		}
 		if (WIFSTOPPED(status))
 		{
-			printf(ALERT "(status: %d, signal: %s) "
+			if (verbose)
+				printf(ALERT "(status: %d, signal: %s) "
 				"child stopped\n",
 				status, strsignal(WSTOPSIG(status)));
+
 			switch(WSTOPSIG(status))
 			{
 				case SIGTRAP:
-					printf(SUCCESS "continuing via "
-					"ptrace\n");
+					/* set up child tracing */
+					if (!setopt)
+					{
+						setptraceopt(signaled);
+						setopt = 1;
+					}
+					else
+					{
+						ptrace(PTRACE_GETEVENTMSG, signaled, NULL, (void *)&newpid);
+						printf(SUCCESS "new LWP %d\n", newpid);
+					}
+					if (verbose)
+						printf(SUCCESS "continuing via "
+						"ptrace\n");
+			break;
+				case SIGSTOP:
+					if (verbose)
+						cprintf(original, signaled, SUCCESS "received SIGSTOP!\n");
 					break;
 				case SIGSEGV:
 				case SIGILL:
@@ -146,9 +195,9 @@ monitor(pid_t target, char *crashreport)
 				case SIGFPE:
 				case SIGBUS:
 				case SIGSYS:
-					printf(SUCCESS "target received "
+					cprintf(original, signaled, SUCCESS "target received "
 					"an interesting signal!\n");
-					printstats(target, crashreport);
+					printstats(signaled, crashreport);
 					break;
 				default:
 					printf(FAILURE "no handling "
@@ -156,7 +205,7 @@ monitor(pid_t target, char *crashreport)
 					"signal\n");
 			}
 
-			ptrace(PTRACE_CONT, target, 0, 
+			ret = ptrace(PTRACE_CONT, signaled, 0, 
 			WSTOPSIG(status) == SIGTRAP ? 0 : 
 			WSTOPSIG(status));
 		}
@@ -194,7 +243,7 @@ main(int argc, char **argv)
 			     "process %d...\n", childpid);
 
 		printf("---monitor session begin ---\n");
-		monitor(childpid, opts->crashlog);
+		monitor(childpid, opts->crashlog, opts->verbose);
 		printf("---end of monitor session---\n");
 
 	} while (opts->continuous);

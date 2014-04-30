@@ -13,6 +13,7 @@ static struct option long_options[] = {
 	{ "fuzzer-port", required_argument, NULL, 'p'},
 	{ "crashlog", required_argument, NULL, 'l'},
 	{ "continuous", no_argument, NULL, 'c'},
+	{ "verbose", no_argument, NULL, 'v'},
 	{ 0, 0, 0, 0}
 };
 
@@ -23,6 +24,7 @@ print_help(char *prog)
 	"usage: %s [options] \"<target>\"\n"
 	"\n"
 	"\t-?, --help		print this help message\n"
+	"\t-v, --verbose	enable verbose output\n"
 	"\t-o, --target-output  specify a file to redirect target output\n"
 	"\t-h, --fuzzer-host	hostname or ip address of the fuzzer\n"	
 	"\t-p, --fuzzer-port	port the fuzzer is listening on\n"
@@ -30,7 +32,7 @@ print_help(char *prog)
 	"\t-c, --continuous	run in continuous mode, resurrecting the\n"
 	"\t			target if a fatal signal is sent\n"
 	"\n"
-	"<target> argument must be encapsultaed it in double qoutes and\n"
+	"<target> argument must be encapsultaed in double qoutes and\n"
 	"a full path to the target executable is required\n",
 	prog);
 }
@@ -54,7 +56,7 @@ parse_opts(int argc, char **argv)
 
 	i = 0;
 	memset(opts, 0, sizeof(opts_t));
-	while ((c = getopt_long(argc, argv, "?h:o:p:l:c", long_options,
+	while ((c = getopt_long(argc, argv, "?h:o:p:l:cv", long_options,
 	      		       &option_index)) != -1)
 	{
 		switch(c)
@@ -94,6 +96,9 @@ parse_opts(int argc, char **argv)
 				break;
 			case 'c':
 				opts->continuous++;	
+				break;
+			case 'v':
+				opts->verbose++;
 				break;
 			default:
 				return NULL;
