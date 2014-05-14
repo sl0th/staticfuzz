@@ -142,7 +142,7 @@ monitor(pid_t target, char *crashreport, int verbose)
 		{
 			printf(FAILURE "wait returned with " 
 				"error %d\n", signaled);
-			return; 
+			continue; 
 		}
 		if (verbose)
 			fprintf(stderr, ALERT "process %d recieved signal!\n", signaled);
@@ -151,14 +151,14 @@ monitor(pid_t target, char *crashreport, int verbose)
 			printf(ALERT "(status: %d, signal: %s) "
 				"child exited \n",
 				status, strsignal(WEXITSTATUS(status)));
-			return;
+			continue;
 		}
 		if (WIFSIGNALED(status))
 		{
 			printf(ALERT "(status: %d, signal: %s) "
 				"child received fatal signal\n",	
 				status, strsignal(WTERMSIG(status)));
-			return;
+			continue;
 		}
 		if (WIFSTOPPED(status))
 		{
