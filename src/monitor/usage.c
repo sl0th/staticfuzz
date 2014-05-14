@@ -32,7 +32,7 @@ print_help(char *prog)
 	"\t-c, --continuous	run in continuous mode, resurrecting the\n"
 	"\t			target if a fatal signal is sent\n"
 	"\n"
-	"<target> argument must be encapsultaed in double qoutes and\n"
+	"<target> argument must be encapsulated in double quotes and\n"
 	"a full path to the target executable is required\n",
 	prog);
 }
