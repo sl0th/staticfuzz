@@ -1,0 +1,328 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<root>
+	<command name="COMMAND">
+		<arg membership="None">ARG</arg>
+	</command>
+	<command name="clearerror">
+	</command>
+	<command name="currentsong">
+	</command>
+	<command name="idle">
+		<arg membership="opt">SUBSYSTEMS</arg>
+	</command>
+	<command name="status">
+	</command>
+	<command name="stats">
+	</command>
+	<command name="consume">
+		<arg membership="req">STATE</arg>
+	</command>
+	<command name="crossfade">
+		<arg membership="req">SECONDS</arg>
+	</command>
+	<command name="mixrampdb">
+		<arg membership="req">deciBels</arg>
+	</command>
+	<command name="mixrampdelay">
+		<arg membership="req">SECONDS</arg>
+	</command>
+	<command name="random">
+		<arg membership="req">STATE</arg>
+	</command>
+	<command name="repeat">
+		<arg membership="req">STATE</arg>
+	</command>
+	<command name="setvol">
+		<arg membership="req">VOL</arg>
+	</command>
+	<command name="single">
+		<arg membership="req">STATE</arg>
+	</command>
+	<command name="replay_gain_mode">
+		<arg membership="req">MODE</arg>
+	</command>
+	<command name="replay_gain_status">
+	</command>
+	<command name="volume">
+		<arg membership="req">CHANGE</arg>
+	</command>
+	<command name="next">
+	</command>
+	<command name="pause">
+		<arg membership="req">PAUSE</arg>
+	</command>
+	<command name="play">
+		<arg membership="None">SONGPOS</arg>
+	</command>
+	<command name="playid">
+		<arg membership="None">SONGID</arg>
+	</command>
+	<command name="previous">
+	</command>
+	<command name="seek">
+		<arg membership="req">SONGPOS</arg>
+		<arg membership="req">TIME</arg>
+	</command>
+	<command name="seekid">
+		<arg membership="req">SONGID</arg>
+		<arg membership="req">TIME</arg>
+	</command>
+	<command name="seekcur">
+		<arg membership="req">TIME</arg>
+	</command>
+	<command name="stop">
+	</command>
+	<command name="add">
+		<arg membership="req">URI</arg>
+	</command>
+	<command name="addid">
+		<arg membership="req">URI</arg>
+		<arg membership="None">POSITION</arg>
+	</command>
+	<command name="clear">
+	</command>
+	<command name="delete">
+		<arg membership="req">POS</arg>
+		<arg membership="req">START:END</arg>
+	</command>
+	<command name="deleteid">
+		<arg membership="req">SONGID</arg>
+	</command>
+	<command name="move">
+		<arg membership="req">FROM</arg>
+		<arg membership="req">START:END</arg>
+		<arg membership="req">TO</arg>
+	</command>
+	<command name="moveid">
+		<arg membership="req">FROM</arg>
+		<arg membership="req">TO</arg>
+	</command>
+	<command name="playlist">
+	</command>
+	<command name="playlistfind">
+		<arg membership="req">TAG</arg>
+		<arg membership="req">NEEDLE</arg>
+	</command>
+	<command name="playlistid">
+		<arg membership="req">SONGID</arg>
+	</command>
+	<command name="playlistinfo">
+		<arg membership="None">SONGPOS</arg>
+		<arg membership="None">START:END</arg>
+	</command>
+	<command name="playlistsearch">
+		<arg membership="req">TAG</arg>
+		<arg membership="req">NEEDLE</arg>
+	</command>
+	<command name="plchanges">
+		<arg membership="req">VERSION</arg>
+	</command>
+	<command name="plchangesposid">
+		<arg membership="req">VERSION</arg>
+	</command>
+	<command name="prio">
+		<arg membership="req">PRIORITY</arg>
+		<arg membership="req">START:END</arg>
+	</command>
+	<command name="prioid">
+		<arg membership="req">PRIORITY</arg>
+		<arg membership="req">ID</arg>
+	</command>
+	<command name="shuffle">
+		<arg membership="None">START:END</arg>
+	</command>
+	<command name="swap">
+		<arg membership="req">SONG1</arg>
+		<arg membership="req">SONG2</arg>
+	</command>
+	<command name="swapid">
+		<arg membership="req">SONG1</arg>
+		<arg membership="req">SONG2</arg>
+	</command>
+	<command name="addtagid">
+		<arg membership="req">SONGID</arg>
+		<arg membership="req">TAG</arg>
+		<arg membership="req">VALUE</arg>
+	</command>
+	<command name="cleartagid">
+		<arg membership="req">SONGID</arg>
+		<arg membership="opt">TAG</arg>
+	</command>
+	<command name="listplaylist">
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="listplaylistinfo">
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="listplaylists">
+	</command>
+	<command name="load">
+		<arg membership="req">NAME</arg>
+		<arg membership="opt">START:END</arg>
+	</command>
+	<command name="playlistadd">
+		<arg membership="req">NAME</arg>
+		<arg membership="req">URI</arg>
+	</command>
+	<command name="playlistclear">
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="playlistdelete">
+		<arg membership="req">NAME</arg>
+		<arg membership="req">SONGPOS</arg>
+	</command>
+	<command name="playlistmove">
+		<arg membership="req">NAME</arg>
+		<arg membership="req">SONGID</arg>
+		<arg membership="req">SONGPOS</arg>
+	</command>
+	<command name="rename">
+		<arg membership="req">NAME</arg>
+		<arg membership="req">NEW_NAME</arg>
+	</command>
+	<command name="rm">
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="save">
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="count">
+		<arg membership="req">TAG</arg>
+		<arg membership="req">NEEDLE</arg>
+		<arg membership="opt">group</arg>
+		<arg membership="opt">GROUPTYPE</arg>
+	</command>
+	<command name="find">
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">WHAT</arg>
+		<arg membership="opt">...</arg>
+	</command>
+	<command name="findadd">
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">WHAT</arg>
+		<arg membership="opt">...</arg>
+	</command>
+	<command name="list">
+		<arg membership="req">TYPE</arg>
+		<arg membership="opt">FILTERTYPE</arg>
+		<arg membership="opt">FILTERWHAT</arg>
+		<arg membership="opt">...</arg>
+		<arg membership="opt">group</arg>
+		<arg membership="opt">GROUPTYPE</arg>
+		<arg membership="opt">...</arg>
+	</command>
+	<command name="listall">
+		<arg membership="None">URI</arg>
+	</command>
+	<command name="listallinfo">
+		<arg membership="None">URI</arg>
+	</command>
+	<command name="listfiles">
+		<arg membership="None">URI</arg>
+	</command>
+	<command name="lsinfo">
+		<arg membership="None">URI</arg>
+	</command>
+	<command name="readcomments">
+		<arg membership="None">URI</arg>
+	</command>
+	<command name="search">
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">WHAT</arg>
+		<arg membership="opt">...</arg>
+	</command>
+	<command name="searchadd">
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">WHAT</arg>
+		<arg membership="opt">...</arg>
+	</command>
+	<command name="searchaddpl">
+		<arg membership="req">NAME</arg>
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">WHAT</arg>
+		<arg membership="opt">...</arg>
+	</command>
+	<command name="update">
+		<arg membership="opt">URI</arg>
+	</command>
+	<command name="rescan">
+		<arg membership="opt">URI</arg>
+	</command>
+	<command name="sticker">
+		<arg membership="plain">get</arg>
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">URI</arg>
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="sticker">
+		<arg membership="plain">set</arg>
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">URI</arg>
+		<arg membership="req">NAME</arg>
+		<arg membership="req">VALUE</arg>
+	</command>
+	<command name="sticker">
+		<arg membership="plain">delete</arg>
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">URI</arg>
+		<arg membership="opt">NAME</arg>
+	</command>
+	<command name="sticker">
+		<arg membership="plain">list</arg>
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">URI</arg>
+	</command>
+	<command name="sticker">
+		<arg membership="plain">find</arg>
+		<arg membership="req">TYPE</arg>
+		<arg membership="req">URI</arg>
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="close">
+	</command>
+	<command name="kill">
+	</command>
+	<command name="password">
+		<arg membership="req">PASSWORD</arg>
+	</command>
+	<command name="ping">
+	</command>
+	<command name="disableoutput">
+		<arg membership="req">ID</arg>
+	</command>
+	<command name="enableoutput">
+		<arg membership="req">ID</arg>
+	</command>
+	<command name="toggleoutput">
+		<arg membership="req">ID</arg>
+	</command>
+	<command name="outputs">
+	</command>
+	<command name="config">
+	</command>
+	<command name="commands">
+	</command>
+	<command name="notcommands">
+	</command>
+	<command name="tagtypes">
+	</command>
+	<command name="urlhandlers">
+	</command>
+	<command name="decoders">
+	</command>
+	<command name="subscribe">
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="unsubscribe">
+		<arg membership="req">NAME</arg>
+	</command>
+	<command name="channels">
+	</command>
+	<command name="readmessages">
+	</command>
+	<command name="sendmessage">
+		<arg membership="req">CHANNEL</arg>
+		<arg membership="req">TEXT</arg>
+	</command>
+</root>
