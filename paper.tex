@@ -1,13 +1,13 @@
 \documentclass[10pt]{article}
 \author{
   Stephens, Nick\\
-  \texttt{nick.stephens93@gmail.com}
+  \texttt{stenic05@evergreen.edu}
   \and
   Boesen, Stefan\\
   \texttt{stefan.boesen@gmail.com}
   \and
   David, Max\\
-  \texttt{maxs-email@404}
+  \texttt{maxpleasure@gmail.com}
 }
 \title{Fuzzing, an exploration of Mind, Body, and Argentina}
 \begin{document}
@@ -24,7 +24,12 @@ The goal of fuzzing is typically to identify locations of potential bugs. Typica
 A final challenge is that simplistic fuzzing measures the state after each input, when in reality, a system's state is affected by previous commands as well. This means that an environment should be set up where one can return to a previous state quickly (using a local virtual machine with memory snapshotting) can be critical for testing sequences of inputs.
 
 Our goal going into this project was to implement a basic fuzzer in order to discover vulnerabilities in an open source program we had all used, \emph{MPD}.
-\section{Fuzzing}
+\section{Implementing the Fuzzer}
+A fuzzer is made up of multiple components. Our fuzzer in particular had two. As mentioned previously there is more to fuzzing than inputing provocative data to the target, one must also have some method of monitoring the target's condition. To monitor the state of MPD as we sent fuzzer data to it, we leveraged Linux's debugging suite \emph{ptrace}. 
+
+When \emph{ptrace} is attached to a target process, it allows the tracer to intercept IPC signals sent to the target. These signals are often indicative of a program crash and can tell us if the program attempted to access a non-existent memory region or execute an illegal instruction, among other things. With \emph{ptrace} we can then dump the callstack and register state for further analysis as well as alert our fuzzer, if we wish it to stop.
+
+MPD also has many input channels to consider. Possible attack surfaces could range from a malicious \emph{Ogg} file constructed to exploit a vulnerability in the file parser, to the remote command interface MPD provides. Our fuzzer only targeted the latter. Developing the fuzzer incrementally, we began by sending completely random strings of data to a \emph{ptrace} monitored MPD server. Next we sent commands followed with arguments composed of random bytes. Finally we began sending arguments which were type correct, but random within the type domain, commands would also be sent in random order, in an attempt to mutate the server's internal state, and gain code coverage.
 
 \section{Conclusion}
 Fuzzing is easy if the codebase is terrible.
