@@ -14,7 +14,7 @@
   \maketitle
 
 \section*{Abstract}
-This paper intents to summarize a quarter of undergraduate research in \emph{fuzzing}. In Section 1 we introduce fuzzing, methodologies, and best practices. Section 2 describes our experiences implementing those techniques on a real world library, the MPD project. Section 3 contains our closing thoughts, including words of advice for those interested.
+This paper intends to summarize a quarter of undergraduate research in \emph{fuzzing}. In Section 1 we introduce fuzzing, methodologies, and best practices. Section 2 describes our experience and tactics implementing those techniques on a real world library, the \emph{Music Player Daemon} project. Section 3 contains our results, closing thoughts, and words of advice for those interested.
 
 \section{Introduction and Intent}
 Our learning contract was intended to expand our understanding of fuzzing and how it applies to real world projects. Fuzzing: Brute Force Vulnerability Discovery [cite] was our primary reference, being a well known introductory book on the topic. Conceptually fuzzing is a very simple topic. By feeding unanticipated input into applications that do not properly handle them, unexpected behavior can be introduced into otherwise functioning programs. As an example, a program may attempt to read a number from a network connection. What happens if the program is sent a character instead? Is the character interpreted as a number, or does it just fail? 
@@ -23,7 +23,8 @@ The goal of fuzzing is typically to identify locations of potential bugs. Typica
 
 A final challenge is that simplistic fuzzing measures the state after each input, when in reality, a system's state is affected by previous commands as well. This means that an environment should be set up where one can return to a previous state quickly (using a local virtual machine with memory snapshotting) can be critical for testing sequences of inputs.
 
-Our goal going into this project was to implement a basic fuzzer in order to discover vulnerabilities in an open source program we had all used, \emph{MPD}.
+Our goal going into this project was to implement a basic fuzzer in order to discover vulnerabilities in an open source program we had all used. We chose  \emph{Music Player Daemon}, which we'll refer to by its initials, \emph{MPD}.
+
 \section{Implementing the Fuzzer}
 A fuzzer is made up of multiple components. Our fuzzer in particular had two. As mentioned previously there is more to fuzzing than inputing provocative data to the target, one must also have some method of monitoring the target's condition. To monitor the state of MPD as we sent fuzzer data to it, we leveraged Linux's debugging suite \emph{ptrace}. 
 
@@ -32,7 +33,7 @@ When \emph{ptrace} is attached to a target process, it allows the tracer to inte
 MPD also has many input channels to consider. Possible attack surfaces could range from a malicious \emph{Ogg} file constructed to exploit a vulnerability in the file parser, to the remote command interface MPD provides. Our fuzzer only targeted the latter. Developing the fuzzer incrementally, we began by sending completely random strings of data to a \emph{ptrace} monitored MPD server. Next we sent commands followed with arguments composed of random bytes. Finally we began sending arguments which were type correct, but random within the type domain, commands would also be sent in random order, in an attempt to mutate the server's internal state, and gain code coverage.
 
 \section{Conclusion}
-Although not as widely deployed as some other big name projects, MPD is a mature open-source project that follows a thoughtful development process with a sizable collection of developers. Patches are vetted through the Clang Static Analyzer to find any common programming errors. Although we could find no history of security audits in the past, an active mailing list shows that new additions are continually reviewed. We were very impressed with the level of organization within the project codebase.
+Although not as widely deployed as some other big name projects, \emph{Music Player Daemon} is a mature open-source project that follows a thoughtful development process with a sizable collection of developers. Patches are vetted through the Clang Static Analyzer to find any common programming errors. Although we could find no history of security audits in the past, an active mailing list shows that new additions are continually reviewed. We were very impressed with the level of organization within the project codebase.
 
 Through our process of fuzzing MPD, specifically its remote command interface, we did not come across any unintended or otherwise bizarre reactions. The command module responded robustly to our barrage of nonstandard inputs, as described in section 2. With more time spent on the project, we believe fuzzing the file parsing capabilities may prove more fruitful. MPD deals with a large number of varying file formats, that historically has held many bugs in similar software.
 
