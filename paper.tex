@@ -7,7 +7,7 @@
   \texttt{stefan.boesen@gmail.com}
   \and
   David, Max\\
-  \texttt{maxpleasure@gmail.com}
+  \texttt{davmax04@evergreen.edu}
 }
 \title{Fuzzing, an exploration of Mind, Body, and Argentina}
 \begin{document}
@@ -32,6 +32,10 @@ When \emph{ptrace} is attached to a target process, it allows the tracer to inte
 MPD also has many input channels to consider. Possible attack surfaces could range from a malicious \emph{Ogg} file constructed to exploit a vulnerability in the file parser, to the remote command interface MPD provides. Our fuzzer only targeted the latter. Developing the fuzzer incrementally, we began by sending completely random strings of data to a \emph{ptrace} monitored MPD server. Next we sent commands followed with arguments composed of random bytes. Finally we began sending arguments which were type correct, but random within the type domain, commands would also be sent in random order, in an attempt to mutate the server's internal state, and gain code coverage.
 
 \section{Conclusion}
-Fuzzing is easy if the codebase is terrible.
+Although not as widely deployed as some other big name projects, MPD is a mature open-source project that follows a thoughtful development process with a sizable collection of developers. Patches are vetted through the Clang Static Analyzer to find any common programming errors. Although we could find no history of security audits in the past, an active mailing list shows that new additions are continually reviewed. We were very impressed with the level of organization within the project codebase.
+
+Through our process of fuzzing MPD, specifically its remote command interface, we did not come across any unintended or otherwise bizarre reactions. The command module responded robustly to our barrage of nonstandard inputs, as described in section 2. With more time spent on the project, we believe fuzzing the file parsing capabilities may prove more fruitful. MPD deals with a large number of varying file formats, that historically has held many bugs in similar software.
+
+Naturally, our inability to find any bugs does not preclude their existence. Any penetration test of this sort could never prove the security of a software. Fuzzing in particular is a rather "dumb" way of finding vulnerabilities; we're throwing random inputs at a program to see what happens. What our fuzzing does accomplish is improve our confidence in MPD's security by assuring a much smaller probability of low-hanging fruits in command parsing. Indeed many bugs have been found from a quick fuzzing exercise, and is usually an excellent first step in any bug hunting endeavor.
 
 \end{document}
