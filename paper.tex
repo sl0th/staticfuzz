@@ -14,10 +14,10 @@
   \maketitle
 
 \section*{Abstract}
-This paper intends to summarize a quarter of undergraduate research in \emph{fuzzing}. In Section 1 we introduce fuzzing, methodologies, and best practices. Section 2 describes our experience and tactics implementing those techniques on a real world library, the \emph{Music Player Daemon} project. Section 3 contains our results, closing thoughts, and words of advice for those interested.
+This paper intends to summarize a quarter of undergraduate research in \emph{fuzzing}. In Section 1 we introduce fuzzing, methodologies, and best practices. Section 2 describes our experience and tactics implementing those techniques on a real world library, the \emph{Music Player Daemon} \cite{mpd} project. Section 3 contains our results, closing thoughts, and words of advice for those interested.
 
 \section{Introduction and Intent}
-Our learning contract was intended to expand our understanding of fuzzing and how it applies to real world projects. Fuzzing: Brute Force Vulnerability Discovery [cite] was our primary reference, being a well known introductory book on the topic. Conceptually fuzzing is a very simple topic. By feeding unanticipated input into applications that do not properly handle them, unexpected behavior can be introduced into otherwise functioning programs. As an example, a program may attempt to read a number from a network connection. What happens if the program is sent a character instead? Is the character interpreted as a number, or does it just fail? 
+Our learning contract was intended to expand our understanding of fuzzing and how it applies to real world projects. \emph{Fuzzing: Brute Force Vulnerability Discovery} \cite{sutton07} was our primary reference, being a well known introductory book on the topic. Conceptually fuzzing is a very simple topic. By feeding unanticipated input into applications that do not properly handle them, unexpected behavior can be introduced into otherwise functioning programs. As an example, a program may attempt to read a number from a network connection. What happens if the program is sent a character instead? Is the character interpreted as a number, or does it just fail? 
 
 The goal of fuzzing is typically to identify locations of potential bugs. Typically this entails having a component reading the ``state'' of some program, whether that's the error log, signals sent, or other behaviors. As the goal is to produce unexpected behavior, it can be difficult to know if you have anticipated all of the possible states. Fuzzing has other challenges as well, such as identifying inputs to target as well as determining what input to generate. Instead of testing every number, perhaps it's more valuable to try extremes and random ones throughout. Strings with unusual characters may be preferred.
 
@@ -38,5 +38,18 @@ Although not as widely deployed as some other big name projects, \emph{Music Pla
 Through our process of fuzzing MPD, specifically its remote command interface, we did not come across any unintended or otherwise bizarre reactions. The command module responded robustly to our barrage of nonstandard inputs, as described in section 2. With more time spent on the project, we believe fuzzing the file parsing capabilities may prove more fruitful. MPD deals with a large number of varying file formats, that historically has held many bugs in similar software.
 
 Naturally, our inability to find any bugs does not preclude their existence. Any penetration test of this sort could never prove the security of a software. Fuzzing in particular is a rather "dumb" way of finding vulnerabilities; we're throwing random inputs at a program to see what happens. What our fuzzing does accomplish is improve our confidence in MPD's security by assuring a much smaller probability of low-hanging fruits in command parsing. Indeed many bugs have been found from a quick fuzzing exercise, and is usually an excellent first step in any bug hunting endeavor.
+
+\begin{thebibliography}{2}
+  \bibitem{mpd}
+    \emph{Music Player Daemon}, 
+    see \texttt{http://www.musicpd.org}
+  \bibitem{sutton07}
+    Michael Sutton,
+    \emph{Fuzzing: Brute Force Vulnerability Discovery},
+    Addison-Wesley Professional, Massachusetts,
+    1st Edition,
+    2007.
+\end{thebibliography}
+
 
 \end{document}
